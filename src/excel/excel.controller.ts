@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Header, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { ExcelService } from './excel.service';
 
@@ -6,10 +14,10 @@ import { ExcelService } from './excel.service';
 export class ExcelController {
   constructor(private excelService: ExcelService) {}
 
-  @Get('/download')
+  @Get('/download/:id')
   @Header('Content-Type', 'text/xlsx')
-  async downloadReport(@Res() res: Response) {
-    const result = await this.excelService.downloadExcel();
+  async downloadReport(@Param('id') id: number, @Res() res: Response) {
+    const result = await this.excelService.downloadExcel(+id);
     res.download(`${result}`);
   }
 
